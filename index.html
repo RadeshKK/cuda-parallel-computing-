@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CUDA Parallel Programming // Module 5 Keynote Masterclass & Visual Simulations</title>
+  <link rel="stylesheet" href="styles.css?v=2">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem("cuda_theme") || "dark";
+      document.documentElement.setAttribute("data-theme", savedTheme);
+    })();
+  </script>
+</head>
+<body>
+
+  <!-- =========================================================================
+       TOP GLOBAL NAVIGATION & SESSION BAR
+       ========================================================================= -->
+  <header class="top-header">
+    <!-- Brand Identity (Left) -->
+    <div class="brand-wrap">
+      <div class="brand-icon-box" title="CUDA Accelerated Computing Module 5">
+        <svg class="brand-chip-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <rect x="4" y="4" width="16" height="16" rx="3" stroke="url(#hdr-chip-grad)" stroke-width="1.8" fill="rgba(16, 185, 129, 0.08)"/>
+          <rect x="9" y="9" width="6" height="6" rx="1.5" fill="url(#hdr-core-grad)"/>
+          <path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3" stroke="url(#hdr-pin-grad)" stroke-width="1.6" stroke-linecap="round"/>
+          <defs>
+            <linearGradient id="hdr-chip-grad" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#10b981"/>
+              <stop offset="1" stop-color="#38bdf8"/>
+            </linearGradient>
+            <linearGradient id="hdr-core-grad" x1="9" y1="9" x2="15" y2="15" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#38bdf8"/>
+              <stop offset="1" stop-color="#10b981"/>
+            </linearGradient>
+            <linearGradient id="hdr-pin-grad" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#10b981"/>
+              <stop offset="1" stop-color="#38bdf8"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <div class="brand-text-block">
+        <div class="brand-heading-row">
+          <span class="brand-title">CUDA Parallel Computing</span>
+          <span class="brand-badge">MOD 5</span>
+        </div>
+        <div class="brand-subtitle">BCS702 · GPU Architecture & Parallel Algorithms</div>
+      </div>
+    </div>
+
+    <!-- Centered Segmented Navigation Pill (Center) -->
+    <nav class="nav-views-bar" aria-label="Master Navigation">
+      <button class="nav-btn nav-active" data-nav-view="keynote" title="Interactive 20-Slide Keynote Deck">
+        <span class="nav-icon">🎬</span>
+        <span class="nav-text">Keynote</span>
+        <span class="nav-badge-pill">20</span>
+      </button>
+      <button class="nav-btn" data-nav-view="simulations" title="Interactive GPU Visual Simulations">
+        <span class="nav-icon">🧪</span>
+        <span class="nav-text">Sims Lab</span>
+        <span class="nav-badge-pill">8</span>
+      </button>
+      <button class="nav-btn" data-nav-view="sandbox" title="Live CUDA Kernel Simulator & Execution Sandbox">
+        <span class="nav-icon">💻</span>
+        <span class="nav-text">Sandbox</span>
+      </button>
+      <button class="nav-btn" data-nav-view="textbook" title="Textbook Chapter 6 Curriculum">
+        <span class="nav-icon">📚</span>
+        <span class="nav-text">Textbook</span>
+      </button>
+      <button class="nav-btn" data-nav-view="exam" title="Exam Prep, MCQs & Viva Voce Q&A">
+        <span class="nav-icon">🎯</span>
+        <span class="nav-text">Exam Prep</span>
+      </button>
+      <a href="gpu-arch-viz/index.html" target="_blank" class="nav-btn nav-link-external" title="Launch Interactive 3D GPU Architecture Explorer">
+        <span class="nav-icon">🔬</span>
+        <span class="nav-text">GPU Explorer</span>
+        <span class="nav-ext-arrow">↗</span>
+      </a>
+    </nav>
+
+    <!-- Quick Actions (Right) -->
+    <div class="header-actions">
+      <!-- Master Presentation PPTX Quick Access -->
+      <a href="CUDA_Module5_Masterclass_Complete.pptx" download="CUDA_Module5_Masterclass_Complete.pptx" class="btn-header-pptx" title="Download Master Presentation Deck (24 Slides PPTX)">
+        <svg class="pptx-icon" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+          <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+        </svg>
+        <span>Download PPTX</span>
+      </a>
+
+      <!-- Light / Dark Mode Toggle Switcher -->
+      <button class="btn-theme-toggle" id="theme-toggle-btn" title="Toggle Light / Dark Mode" aria-label="Toggle theme">
+        <span class="theme-icon" id="theme-icon">☀️</span>
+        <span class="theme-label" id="theme-label">Light</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       MAIN APPLICATION VIEWPORTS
+       ========================================================================= -->
+  <main class="main-viewport">
+
+    <!-- -----------------------------------------------------------------------
+         VIEW 1: KEYNOTE PRESENTATION DECK (FULL-SCREEN EXPERIENCE)
+         ----------------------------------------------------------------------- -->
+    <section id="view-keynote" class="view-panel">
+      <!-- Top Deck Progress Track -->
+      <div class="deck-progress-track">
+        <div class="deck-progress-fill" id="deck-progress-fill"></div>
+      </div>
+
+      <!-- Keynote Deck Controls Bar -->
+      <div class="keynote-toolbar">
+        <div class="deck-nav-buttons">
+          <button class="btn btn-outline" id="slide-prev-btn">◀ Prev Slide [←]</button>
+          <span class="slide-counter-badge" id="slide-counter-display">1 / 20</span>
+          <button class="btn btn-primary" id="slide-next-btn">Next Slide [→ / Space]</button>
+        </div>
+
+        <div class="deck-utility-buttons">
+          <a href="CUDA_Module5_Masterclass_Complete.pptx" download="CUDA_Module5_Masterclass_Complete.pptx" class="btn btn-action btn-sm" style="text-decoration:none; display:inline-flex; align-items:center; gap:4px;">📥 Download Master PPTX (24 Slides)</a>
+          <button class="btn btn-outline btn-sm" id="toggle-grid-btn">🗂️ Overview Grid [O]</button>
+          <button class="btn btn-outline btn-sm" id="toggle-notes-btn">🎙️ Speaker Notes [N]</button>
+          <button class="btn btn-outline btn-sm" id="toggle-fullscreen-btn">⛶ Fullscreen [F]</button>
+          <button class="btn btn-action btn-sm" onclick="appController.switchView('sandbox')">💻 Live Sandbox [S]</button>
+        </div>
+      </div>
+
+      <!-- Slide Viewport -->
+      <div id="keynote-slide-viewport" class="keynote-viewport-card">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+
+      <!-- Slide Overview Grid Modal -->
+      <div id="slide-grid-modal" class="modal-backdrop">
+        <div class="slide-grid-container">
+          <div class="grid-modal-header">
+            <h3>🗂️ Keynote Deck Overview (20 Slides)</h3>
+            <button class="btn btn-outline btn-sm" onclick="appController.closeSlideGrid()">Close [Esc]</button>
+          </div>
+          <div id="slide-grid-thumbnails" class="thumbnails-grid">
+            <!-- Rendered dynamically by app.js -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Speaker Notes Drawer -->
+      <div id="speaker-notes-drawer" class="speaker-notes-drawer">
+        <div class="drawer-header">
+          <span>🎙️ Presenter Notes & 2-Hour Pacing Guide</span>
+          <button class="drawer-close" onclick="appController.toggleNotes()">✕</button>
+        </div>
+        <div id="speaker-notes-content" class="drawer-body">
+          <!-- Rendered dynamically by app.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------------------------
+         VIEW 2: VISUAL SIMULATIONS LAB (STANDALONE CANVAS ENGINES)
+         ----------------------------------------------------------------------- -->
+    <section id="view-simulations" class="view-panel view-hidden">
+      <div class="sim-suite-layout">
+        <aside class="sim-sidebar">
+          <h4>Visual Simulation Suite</h4>
+          <nav class="sim-nav-list">
+            <button class="sim-nav-item item-active" onclick="simManager.switchSim('sim-branch-divergence')">
+              <span>Warp Branch Divergence</span>
+              <span class="sim-item-sub">SIMT Lockstep & Masks (Table 6.1)</span>
+            </button>
+            <button class="sim-nav-item" onclick="simManager.switchSim('sim-coordinates')">
+              <span>Grid & Block Coordinate Mapper</span>
+              <span class="sim-item-sub">1D/2D Indexing & SM Mapping</span>
+            </button>
+            <button class="sim-nav-item" onclick="simManager.switchSim('sim-cpu-vs-gpu')">
+              <span>CPU vs. GPU Architecture</span>
+              <span class="sim-item-sub">Flynn's SISD/MIMD vs. SIMT</span>
+            </button>
+            <button class="sim-nav-item" onclick="simManager.switchSim('sim-memory-flow')">
+              <span>PCIe Memory Flow</span>
+              <span class="sim-item-sub">Explicit vs. Managed Memory</span>
+            </button>
+            <button class="sim-nav-item" onclick="simManager.switchSim('sim-bank-conflicts')">
+              <span>Shared Memory 32-Bank Conflicts</span>
+              <span class="sim-item-sub">Serialization & Stride (Table 6.9)</span>
+            </button>
+            <button class="sim-nav-item" onclick="simManager.switchSim('sim-trap1-atomic')">
+              <span>Trap I: Race Condition & atomicAdd</span>
+              <span class="sim-item-sub">Contention Bottleneck (Table 6.5)</span>
+            </button>
+            <button class="sim-nav-item" onclick="simManager.switchSim('sim-tree-reduction')">
+              <span>Trap II: Shared Memory Tree</span>
+              <span class="sim-item-sub">Stride-Halving & __syncthreads()</span>
+            </button>
+            <button class="sim-nav-item" onclick="simManager.switchSim('sim-warp-shuffle')">
+              <span>Trap III: Warp Shuffles & Multi-Warp</span>
+              <span class="sim-item-sub">__shfl_down_sync & Benchmarks</span>
+            </button>
+          </nav>
+        </aside>
+
+        <div id="sim-viewport">
+          <!-- Rendered dynamically by simulations.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------------------------
+         VIEW 3: CUDA CODE SANDBOX & VIRTUAL GPU
+         ----------------------------------------------------------------------- -->
+    <section id="view-sandbox" class="view-panel view-hidden">
+      <div class="sandbox-layout">
+        <!-- Editor Panel -->
+        <div class="sandbox-editor-panel">
+          <div class="editor-toolbar">
+            <div class="preset-selector-wrap">
+              <label for="sandbox-preset-select">Textbook Program:</label>
+              <select id="sandbox-preset-select" class="select-input">
+                <option value="cuda_hello">Program 6.1: Hello World (1 Block)</option>
+                <option value="cuda_hello_multi">Program 6.2: Hello Multiple Blocks</option>
+                <option value="cuda_vec_add_managed">Program 6.3/6.6: Vector Add (Managed Memory)</option>
+                <option value="cuda_vec_add_explicit">Program 6.9: Vector Add (Explicit cudaMemcpy)</option>
+                <option value="cuda_trap1_atomic">Program 6.12: Trapezoidal I (atomicAdd)</option>
+                <option value="cuda_trap2_shared">Program 6.14: Trapezoidal II (Shared Memory Tree)</option>
+                <option value="cuda_trap3_warp_shuffle">Program 6.15: Trapezoidal III (Warp Shuffle)</option>
+              </select>
+            </div>
+            <span id="sandbox-current-preset-name" class="badge badge-primary">Program 6.1</span>
+          </div>
+
+          <textarea id="sandbox-code-editor" class="code-editor-textarea" spellcheck="false"></textarea>
+
+          <div class="editor-config-bar">
+            <div class="launch-params">
+              <span>Launch Grid:</span>
+              <code><<<</code>
+              <input type="number" id="sb-grid-x" class="param-num-input" value="1" min="1" max="16" title="Grid Dim X">
+              <code>,</code>
+              <input type="number" id="sb-block-x" class="param-num-input" value="8" min="1" max="1024" title="Block Dim X">
+              <code>>>></code>
+            </div>
+
+            <div class="editor-actions">
+              <button class="btn btn-outline" id="sandbox-clear-btn">Clear Console</button>
+              <button class="btn btn-action" id="sandbox-run-btn">Execute on Virtual GPU 🚀</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Output & Memory Inspector Panel -->
+        <div class="sandbox-output-panel">
+          <div class="console-card">
+            <div class="console-header">
+              <h4>🖥️ Emulated GPU Console (stdout / printf)</h4>
+              <span class="badge badge-secondary">Host & Device Synchronized</span>
+            </div>
+            <pre id="sandbox-console" class="console-output-pre">[CUDA Virtual GPU Initialized. Select a kernel and click Execute.]</pre>
+          </div>
+
+          <div class="telemetry-card">
+            <h4>⚡ Virtual Hardware Telemetry</h4>
+            <div id="sandbox-telemetry" class="telemetry-stats-grid">
+              <div class="stat-badge"><span>Status:</span> <strong>Ready</strong></div>
+            </div>
+          </div>
+
+          <div class="mem-inspector-card">
+            <div id="sandbox-memory-inspector">
+              <p class="text-muted" style="font-size: 12px;">Memory buffers will populate after kernel execution.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------------------------
+         VIEW 4: TEXTBOOK CHAPTER 6 REFERENCE
+         ----------------------------------------------------------------------- -->
+    <section id="view-textbook" class="view-panel view-hidden">
+      <div class="textbook-layout">
+        <div class="textbook-header">
+          <h2>Peter S. Pacheco & Matthew Malensek: Chapter 6 Reference</h2>
+          <p class="text-muted">An Introduction to Parallel Programming, 2nd Edition - Complete Section Analysis & Formulas</p>
+        </div>
+        <div id="textbook-sections-list">
+          <!-- Rendered dynamically by app.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------------------------
+         VIEW 5: EXAM PREP & VIVA VOCE
+         ----------------------------------------------------------------------- -->
+    <section id="view-exam" class="view-panel view-hidden">
+      <div class="exam-layout">
+        <div>
+          <h3 class="exam-section-title">📝 VTU BCS702 Question Bank (10-Mark Model Answers)</h3>
+          <div id="exam-questions-list">
+            <!-- Rendered dynamically by app.js -->
+          </div>
+        </div>
+
+        <div>
+          <div id="quiz-container">
+            <!-- Rendered dynamically by app.js -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Core Scripts -->
+  <script src="curriculum.js?v=2"></script>
+  <script src="slides_data.js?v=2"></script>
+  <script src="canvas_simulations.js?v=2"></script>
+  <script src="cuda_emulator.js?v=2"></script>
+  <script src="simulations.js?v=2"></script>
+  <script src="app.js?v=2"></script>
+
+</body>
+</html>

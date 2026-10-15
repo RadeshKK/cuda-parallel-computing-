@@ -1,0 +1,372 @@
+Page 1 (Header: CHAPTER)
+   -> CUDA
+   -> 6.1GPUsandGPGPU
+   -> grammingon GPUs.Currently themostwidely usedAPIsare CUDA and OpenCL.
+   -> CUDAwasdevelopedforuseonNvidiaGPUs.OpenCL,ontheotherhand,wasde-
+   -> runonandinformation abouthowitshouldberun.SinceCUDAwasdeveloped to
+Page 2 (Header: 292)
+   -> CHAPTER6GPUprogrammingwithCUDA
+   -> Table6.1Executionof branchonaSIMDsystem.
+   -> 6.2GPUarchitectures
+   -> while the other datapaths executex[i]-=2.SeeTable 6.1.
+Page 3 (Header: 6.3Heterogeneouscomputing)
+   -> 6.3Heterogeneouscomputing
+   -> Table6.2Executionof branchona systemwithmultipleSMs.
+   -> Table 6.2.)
+   -> EachSMhasarelativelysmall blockofmemory thatissharedamongitsSPs.As
+   -> singlechip alsohave access to amuchlarger block of memorythat isshared among
+Page 4 (Header: 294)
+   -> CHAPTER6GPUprogrammingwithCUDA
+   -> Shared
+   -> Shared
+   -> FIGURE6.1
+   -> FIGURE6.2
+Page 5 (Header: 6.4CUDAhello)
+   -> 6.4CUDAhello
+   -> 6.4CUDAhello
+   -> Solet'sstart talking about the CUDAAPI,theAPIwe'llbe usingtoprogram hetero-
+   -> CUDAisasoftwareplatformthatcanbeusedtowriteGPGPUprogramsfor
+   -> heterogeneoussystemsequippedwith anNvidia GPU.CUDAwas originally an
+Page 6 (Header: 296)
+   -> CHAPTER6GPUprogrammingwithCUDA
+   -> We'llwrite aCUDACprograminwhicheach CUDA threadprintsagreeting.Since
+   -> Note thateventhoughourprograms arewrittenin CUDAC,CUDAprograms
+   -> cannotbecompiledwithanordinaryCcompiler.SounlikeMPIandPthreads,CUDA
+   -> is not justa library that canbe linked in to an ordinary Cprogram:CUDArequires a
+Page 7 (Header: 6.4CUDAhello)
+   -> 6.4CUDAhello
+   -> #include <cuda.h>
+   -> /*HeaderfileforCUDA*/
+   -> CudaDeviceSynchronize();
+   -> Program6.1:CUDAprogram thatprintsgreetingsfrom thethreads.
+Page 8 (Header: 298)
+   -> CHAPTER6GPUprogrammingwithCUDA
+   -> 6.5Acloserlook
+   -> Sowhat exactlyhappenswhen weruncuda_hello?Let'stake a closer look.
+   -> threadIdxisone ofseveralvariables definedbyCUDAwhenakernelisstarted.In
+   -> andaCUDAkernelisthatkernelexecutionisasynchronous.Thismeans that the
+Page 9 (Header: 6.6Threads,blocks,and grids)
+   -> 6.6Threads,blocks,and grids
+   -> 6.6 Threads,blocks,and grids
+   -> cessors(SPs).Whena CUDAkernelruns,eachindividual thread willexecute its
+   -> CUDA organizes threads into blocks andgrids.A thread block (or just a block
+   -> blocks,each consisting of a user-specified number of threads.(SeeProgram 6.2.） In
+Page 10 (Header: 300)
+   -> CHAPTER6GPUprogrammingwithCUDA
+   -> #include<cuda.h>/*HeaderfileforCUDA*/
+   -> cudaDeviceSynchronize(）;
+   -> Program6.2:CUDAprogramthatprintsgreetingsfromthreadsinmultipleblocks.
+   -> 5Nvidiadevices that have compute capability2 (see Section 6.7)only allowx-and y-dimensions ina
+Page 11 (Header: 6.7Nvidiacomputecapabilities and device architectures301)
+   -> 6.7Nvidiacomputecapabilities and device architectures301
+   -> Note that all theblocksmust have thesamedimensions.Moreimportantly,CUDA
+   -> 6.7Nvidia computecapabilitiesand device architectures7
+   -> 6WiththentroductionofCUDA9and thePascalprocessoritbecamepossbletosynchronizethreads
+   -> in multiple blocks. See Subsection 7.1.13 and Exercise 7.6.
+Page 12 (Header: 302)
+   -> CHAPTER6GPUprogrammingwithCUDA
+   -> Table6.3GPU architectures andcompute capabilities.
+   -> 6.b
+   -> theyfallin therange O-7. CUDA nolonger supports deviceswith compute capability
+   -> further information,see the appendix on compute capabilities in the CUDA C++
+Page 13 (Header: 6.8Vectoraddition)
+   -> 6.8Vectoraddition
+   -> /*Getthe commandlinearguments，andsetupvectors*/
+   -> Allocate_vectors（&x，&y，&z，&cz，n）;
+   -> Init_vectors（x，y，n，i_g）;
+   -> cudaDeviceSynchronize();
+Page 14 (Header: 304)
+   -> CHAPTER6GPUprogrammingwithCUDA
+   -> Table6.4Globalthreadranksorindexesin
+   -> ranks orindexes are showninTable6.4.In thekernel,we assignthisglobalrank to
+   -> notbeexactlythesame asthenumber ofcomponentsofthevectors.Sobeforecar-
+   -> Note that ifweneeded torun ourprogram on asystemthat didn't support CUDA,
+Page 15 (Header: 6.8Vectoraddition)
+   -> 6.8Vectoraddition
+   -> Program6.4:Serialvectoradditionfunction.
+   -> 6.8.2Get_args
+   -> of threads,it prints a message and terminates.(SeeProgram 6.5.)Note that Get_args
+   -> 6.8.3Allocate_vectorsandmanagedmemory
+Page 16 (Header: 306)
+   -> CHAPTER6GPUprogrammingwithCUDA
+   -> Program6.5:Get_argsfunctionfromCUDAprogram thataddstwovectors.
+   -> void Allocate_vectors(
+   -> cudaMallocManaged(x_p，n*sizeof（float));
+   -> cudaMallocManaged(y_p,n*sizeof（float));
+Page 17 (Header: 6.8Vectoraddition)
+   -> 6.8Vectoraddition
+   -> The returnvalue,whichhastype cudaError_t,allows thefunction toreturn aner-
+   -> ror.MostCUDAfunctions returna cudaError_tvalue,andif you're having problems
+   -> in the codewe discusswe'll generallyignore cudaError_t return values.
+   -> It defaults tocudaMemAttachGlobaland canbe omitted.
+Page 18 (Header: 308)
+   -> CHAPTER6GPUprogrammingwithCUDA
+   -> ThefunctionInit_vectorseitherreadsxandyfrom stdinusingscanf orgenerates
+   -> The Serial_vec_add function (Program 6.4) just adds x and y on the host using a
+   -> TheTwo_norm_diff function computes the“distance”between thevectorzcom-
+   -> puted by thekernel and thevectorcz computed bySerial_vec_add.Soit takes the
+Page 19 (Header: 6.8Vectoraddition)
+   -> 6.8Vectoraddition
+   -> 1Free_vectors(
+   -> /*AllocatedwithcudaMallocManaged*/
+   -> cudaFree（x);
+   -> cudaFree（y);
+Page 20 (Header: 310)
+   -> CHAPTER6GPUprogrammingwithCUDA
+   -> A1locate_vectors（&hx，&hy，&hz，&cz，&dx，&dy，&dz，n）；
+   -> Init_vectors（hx,hy,n，i_g）;
+   -> /*Copyvectorsxandyfromhosttodevice*/
+   -> cudaMemcpy（dx，hx，n*sizeof（float)，cudaMemcpyHostToDevice）;
+Page 21 (Header: 6.8Vectoraddition)
+   -> 6.8Vectoraddition
+   -> void Allocate_vectors(
+   -> cudaMalloc(dx_p,n*sizeof（float));
+   -> cudaMalloc（dy_p,n*sizeof（float));
+   -> cudaMalloc(dz_p,n*sizeof（float）);
+Page 22 (Header: 312)
+   -> CHAPTER6GPUprogrammingwithCUDA
+   -> After thecall to thekernel,wecopythe result of thevector addition from the
+   -> device to the host inLine 31 using cudaMemcpy again.A call to cudaMemcpy is syn-
+   -> Soin thisversionofvector additionwedonotneedtousecudaDeviceSynchronizeto
+   -> freeing seven pointers instead offour.Asbefore,theFree_vectorsfunction frees the
+Page 23 (Header: 6.9ReturningresultsfromCUDAkernels)
+   -> 6.9ReturningresultsfromCUDAkernels
+   -> cudaMallocManaged（&sum_p，sizeof（int));
+   -> cudaDeviceSynchronize();
+   -> cudaFree（sum_p);
+   -> cudaMalloc（&dsum_p，sizeof（int）);
+Page 24 (Header: 314)
+   -> CHAPTER6GPUprogrammingwithCUDA
+   -> cudaDeviceSynchronize();
+   -> <3.0,and on systems with compute capability<6.0,sum can’t be accessed on the
+   -> access sumuntil after the call to cudaDeviceSynchronize hascompleted.
+   -> 6.10CUDAtrapezoidalrule|
+Page 25 (Header: 6.10CUDA trapezoidalruleI315)
+   -> 6.10CUDA trapezoidalruleI315
+   -> WecanimplementthiswiththeserialfunctionshowninProgram6.11.
+   -> Program6.11:Aserial function implementing the trapezoidal rulefor a single CPU.
+   -> 6.10.2ACUDAimplementation
+   -> the forloop.Sowhenwe applyFoster'smethod to the trapezoidalrule,we'remainly
+Page 26 (Header: 316)
+   -> CHAPTER6GPUprogrammingwithCUDA
+   -> 3.Thevariable trapmust be shared among the threads.So the addition of my_trap
+   -> Program6.12showshowwemightdealwith theseproblems.Inthefollowing
+   -> 6.10.3Initialization,returnvalue,and finalupdate
+   -> LikethethreadsstartedinPthreads andOpenMP,eachCUDAthreadhasitsown
+Page 27 (Header: 6.10CUDA trapezoidalrule|317)
+   -> 6.10CUDA trapezoidalrule|317
+   -> *cudaMallocManaged*/
+   -> cudaDeviceSynchronize();
+   -> Program6.12:CUDAkernelandwrapperimplementingtrapezoidalrule.
+   -> cudaMallocManaged(&trap_p，sizeof（float));
+Page 28 (Header: 318)
+   -> CHAPTER6GPUprogrammingwithCUDA
+   -> trap_pwill refer to the samememorylocation.So*trap_pwill be shared.
+   -> Ifyoulook at thecode inProgram6.12,you'll see thatwe'veplaced most of the
+   -> 6.10.4Usingthecorrectthreads
+   -> numberoftrapezoids.Since theserialforloopiteratesfrom1upton-1,threadOand
+Page 29 (Header: 6.10CUDA trapezoidalrule|319)
+   -> 6.10CUDA trapezoidalrule|319
+   -> theadditionisinprogress.Becauseof this,theCUDAlibrarydefinesseveralatomic
+   -> ofProgram 6.12.
+   -> 6.10.6PerformanceoftheCUDAtrapezoidalrule
+   -> We canfind therun-time of our trapezoidal rulebyfindingtheexecutiontime of the
+Page 30 (Header: 320)
+   -> CHAPTER6GPUprogrammingwithCUDA
+   -> Table6.5Meanrun-timesforserialandCUDAtrapezoidalrule
+   -> minimum.SoforourdiscussionofimplementingthetrapezoidalruleusingCUDA
+   -> (Sections 6.10-6.13),we'lluse themeanrun-time,andthemeans are taken over at
+   -> WhenweruntheserialtrapezoidalandtheCUDAtrapezoidalrulefunctions
+Page 31 (Header: 6.11CUDA trapezoidal rulelIl:improvingperformance)
+   -> 6.11CUDA trapezoidal rulelIl:improvingperformance
+   -> Table6.6Basicglobalsumwitheight
+   -> Continuing in thisfashion we get a sequence of atomicAdds,one per thread.Table 6.6
+   -> putationmay require a sequence of 8calculations.Fig.6.3illustrates a possible
+   -> better,a shrub).SeeFig.6.4.
+Page 32 (Header: 322)
+   -> CHAPTER6GPUprogrammingwithCUDA
+   -> FIGURE6.3
+   -> areseveralfunctionscalledwarpshuffles,thatallowacollectionof threadswithina
+   -> warp toreadvariablesstoredby otherthreadsinthewarp.
+   -> 6.11.2Localvariables,registers,sharedandglobalmemory
+Page 33 (Header: 6.11CUDAtrapezoidalrulell:improvingperformance)
+   -> 6.11CUDAtrapezoidalrulell:improvingperformance
+   -> FIGURE6.4
+   -> Table6.7MemorystatisticsforsomeNvidiaGPUs.
+   -> SharedMem:
+   -> memory.In themiddleis a faster,smallerlevel:shared memory.At the topis the
+Page 34 (Header: 324)
+   -> CHAPTER6GPUprogrammingwithCUDA
+   -> a kerneltoimproveifweincrease ouruse ofregisters andreduce ouruseof shared
+   -> is tinycompared tothestorage availableinshared andglobal memory.
+   -> 6.11.3Warpsandwarpshuffles
+   -> tobesuperiortoanimplementationthatusessharedorglobalmemory,andthewarp
+Page 35 (Header: 6.11CUDA trapezoidalruleIl:improvingperformance)
+   -> 6.11CUDA trapezoidalruleIl:improvingperformance
+   -> in thewarpparticipatesin thecall to_shf1_down_sync.If the threadwith lanel calls
+   -> We'llonlyusewidth=warpsize,andsinceitsdefaultvalueiswarpsize,wellomit
+   -> Whathappensifthreadlcalls_shfl_down_syncbut/+diff≥warpSize?Inthis
+   -> What happensif thread Icalls_shf1_down_sync,and I+diff<warpSize,but
+Page 36 (Header: 326)
+   -> CHAPTER6GPUprogrammingwithCUDA
+   -> FIGURE6.5
+   -> Tree-structuredsumusingwarpshuffle.
+   -> Fig.6.5showshow thefunctionwouldoperateifwarpSizewere8.(The diagram
+   -> would beillegibleifwe useda warpSize of 32.)Perhaps themost confusingpoint in
+Page 37 (Header: 6.11CUDAtrapezoidalrulell:improvingperformance)
+   -> 6.11CUDAtrapezoidalrulell:improvingperformance
+   -> FIGURE6.6
+   -> Disseminationsum usingsharedmemory.
+   -> Since the threads belonging to a singlewarp operate synchronously,we can im-
+   -> plementsomethingverysimilar toawarpshuffleusingsharedmemoryinstead of
+Page 38 (Header: 328CHAPTER6GPUprogrammingwithCUDA)
+   -> 328CHAPTER6GPUprogrammingwithCUDA
+   -> thermore,in anycycleinwhichthe threadsinawarp areworking,each threadeither
+   -> An obviousquestionhere is:how does Shared_mem_summakeuse of Nvidia's
+   -> sharedmemory?The answer is that it‘snotrequired to use sharedmemory.The
+   -> function’s argument,the array shared_vals,couldresidein eitherglobal memory or
+Page 39 (Header: 6.12Implementationof trapezoidalrulewithwarpSizethreadblocks)
+   -> 6.12Implementationof trapezoidalrulewithwarpSizethreadblocks
+   -> 6.12.1 Host code
+   -> Forboth thewarp shuffle and the sharedmemoryversions,thehostcodeisvirtually
+   -> identical to the code for ourfirst CUDAversion.The only substantive differenceis
+   -> eachthread blockhaswarpSize threads.
+Page 40 (Header: 330)
+   -> CHAPTER6GPUprogrammingwithCUDA
+   -> _shared_-
+   -> float shared_vals[WARPSZ];
+   -> int my_1ane=threadIdx.x%warpSize;
+   -> shared_vals[my_1ane]=0.0f;
+Page 41 (Header: 6.13CUDAtrapezoidalrulell:blockswithmorethanonewarp)
+   -> 6.13CUDAtrapezoidalrulell:blockswithmorethanonewarp
+   -> Table6.8Meanrun-timesfortrapezoidalruleusingblocksizeof
+   -> WarpShuffle
+   -> SharedMemory
+   -> gramsdo significantlybetter than theoriginal.For the GK20A,the warp shuffle
+Page 42 (Header: 332)
+   -> CHAPTER6GPUprogrammingwithCUDA
+   -> However,there'saracecondition.Doyouseeit?WhenwarpOtriestocompute the
+   -> totalofthewarpsumsintheblock,itdoesn'tknowwhether allthewarpsinthe
+   -> blockhave completed their sums.Forexample,supposewehave twowarps,warp0
+   -> andwarp1,each of which has 32 threads.Recall that the threads in awarp operate in
+Page 43 (Header: 6.13CUDAtrapezoidalrulelll:blockswithmorethanonewarp)
+   -> 6.13CUDAtrapezoidalrulelll:blockswithmorethanonewarp
+   -> 6.13.2Moresharedmemory
+   -> Ifwetrytoimplement thepseudocodeinCUDA,we'llseethatthere'sanimportant
+   -> warp O obtain access to the sums computed by the other warps?It can’t use a warp
+   -> shuffle andregisters:thewarpshuffles only allow a thread toread aregisterbelonging
+Page 44 (Header: 334)
+   -> CHAPTER6GPUprogrammingwithCUDA
+   -> float my_result= Shared_mem_sum(shared_vals);
+   -> Tocontinueweneed tostore thewarp sumsin locations that canbe accessed
+   -> by the threads inwarpOin the block,and it might be tempting totry tomake a
+   -> 32elementsforboth the contributions of the threadsinwarp O,and thewarpsums
+Page 45 (Header: 6.13CUDAtrapezoidalruleIll:blockswithmorethanonewarp)
+   -> 6.13CUDAtrapezoidalruleIll:blockswithmorethanonewarp
+   -> Table6.9Sharedmemorybanks:Columnsaremem-
+   -> that the32 threadsin awarp can simultaneously access sharedmemory:the threads
+   -> in awarp can simultaneously access shared memorywheneach thread accesses a
+   -> Table6.9illustrates theorganizationof thread_calcs.Inthe table,thecolumns
+Page 46 (Header: 336)
+   -> CHAPTER6GPUprogrammingwithCUDA
+   -> Soifwe'reusingsharedmemorywarpsums,asimplesolutionistodeclaretwo
+   -> arraysof sharedmemory:oneforstoringthecomputationsmadebyeachthread,and
+   -> anotherforstoringthewarpsums.
+   -> --shared--float thread_calcs[MAx_BLKSZ];
+Page 47 (Header: 6.13CUDAtrapezoidalrulell:blockswithmorethanonewarp)
+   -> 6.13CUDAtrapezoidalrulell:blockswithmorethanonewarp
+   -> -_shared_-
+   -> _shared_-
+   -> float warp_sum_arr[wARPSZ];
+   -> int my_warp=threadIdx.x/warpSize;
+Page 48 (Header: 338)
+   -> CHAPTER6GPUprogrammingwithCUDA
+   -> Table6.10Meanrun-timesfortrapezoidalruleusingarbitraryblocksize
+   -> WarpShuffle,32ths/blk
+   -> SharedMemory,32ths/blk
+   -> WarpShuffle
+Page 49 (Header: 6.14Bitonicsort339)
+   -> 6.14Bitonicsort339
+   -> FIGURE6.7
+   -> FIGURE6.8
+   -> can be thought of as two two-element butterfly operations.(SeeFig.6.7.)The term
+   -> elementbutterfly.(SeeFig.6.8.)Afour-elementbutterfly starts with two“linked”
+Page 50 (Header: 340)
+   -> CHAPTER6GPUprogrammingwithCUDA
+   -> Table6.11Bitonicsortofafour-elementlist:firsttwo
+   -> An example that sorts thelist{15,77,83,86,35,85,92,93}is shown inFig.6.9.The
+   -> detailsof the element pairings are shown inTable6.12.
+   -> pseudocodefora serial bitonic sort.(SeeProgram 6.16.)The outer loop,for bf_sz,is
+Page 51 (Header: 6.14Bitonicsort)
+   -> 6.14Bitonicsort
+   -> FIGURE6.9
+   -> Program6.16:Pseudocodeforserial bitonic sort.
+Page 52 (Header: 342)
+   -> CHAPTER6GPUprogrammingwithCUDA
+   -> Table6.12Bitonicsortofaneight-elementlist.
+   -> 6.14.2Butterfliesandbinaryrepresentations
+   -> elementexampleisshowninFig.6.10.Thisshowsthethreeindividualstagesinan
+   -> subscripts,and the threadranks.(SeeTable6.13.)Theexamplesin the table show that
+Page 53 (Header: 6.14Bitonicsort)
+   -> 6.14Bitonicsort
+   -> FIGURE6.10
+   -> uparrowinFig.6.10.
+Page 54 (Header: 344)
+   -> CHAPTER6GPUprogrammingwithCUDA
+   -> Table6.13Mappingof threadstoelementsinbitonicsort.
+   -> Table6.14Isanelementpartofanincreasing（Inc)or
+   -> resentations of bf_sz and the element subscript.(See Table 6.14.)If we look at the
+Page 55 (Header: 6.14Bitonicsort345)
+   -> 6.14Bitonicsort345
+   -> gram 6.17.)Here,weve replaced the two calls to Compare_swap in the original
+   -> Program6.17:Pseudocodefor asecondserialimplementationofbitonicsort.
+   -> 6.14.3Parallelbitonicsort1
+   -> a multithreadedimplementationbyparallelizing theinnermostloopinProgram6.17
+Page 56 (Header: 346)
+   -> CHAPTER6GPUprogrammingwithCUDA
+   -> Table6.15Sequenceofeventsinafour-elementbutterfly.
+   -> warphavecompleted thefirst.However,it’snotdifficult tosee that thisproblemcan
+   -> happenif wehavemore than onewarp.Forexample,supposewehave128elements
+   -> inthelist,64threads,andtwowarpsof32threads.Thenmuchthesamesituation
+Page 57 (Header: 6.14Bitonicsort347)
+   -> 6.14Bitonicsort347
+   -> 6.14.4Parallelbitonicsort l
+   -> limited.Sincecurrent-generationCUDA threadblockscanconsistofatmost1024
+   -> the algorithmwasworkingonadecreasingsublist.Seeprogrammingassignment6.4.
+   -> callswedon'tneedtocallcudaDeviceSynchronize:thesecondkernelcallwillwait
+Page 58 (Header: 348)
+   -> CHAPTER6GPUprogrammingwithCUDA
+   -> ThisgivesusthehostfunctionshowninProgram6.19.
+   -> Program6.19:Hostfunctionthatimplementsageneral CUDAbitonicsort.
+   -> ingof theelements shown in Table6.16will be sorted.Thenwe'll proceed to the
+   -> these sizes,well iterate in theinner loop through the stages shown inTable6.17.Of
+Page 59 (Header: 6.15Summary)
+   -> 6.15Summary
+   -> Table6.16Elementsinsortedsublistsafter
+   -> Table6.17Stagesexecutedby
+   -> Table6.18Meanrun-timesforvarioussortsofalistof
+   -> Table6.19 shows thetimes for sortingalist with2.097,152(221)elements onthe
+Page 60 (Header: 350)
+   -> CHAPTER6GPUprogrammingwithCUDA
+   -> Table6.19Meanrun-timesforvarioussortsofalistof
+   -> strained to executeinlockstep:awarpis asubset of thethreadsina thread block that
+   -> executes inlockstep.Currently,Nvidia warps consist of32consecutive threads.
+   -> block offastshared memory,whichisshared among the threads ina threadblock.
+Page 61 (Header: 6.15Summary)
+   -> 6.15Summary
+   -> gridDim.x=4and b1ockDim.x=256.
+   -> --host--cudaError_t cudaDeviceSynchronize(void);
+   -> indicatesthat thisfunctionruns ontheost,andcudaError_tisaCUDAdefinedtye
+   -> CUDA source files usuallyhave a suffixof“.cu”;for example,hello.cu.Since
+Page 62 (Header: 352)
+   -> CHAPTER6GPUprogrammingwithCUDA
+   -> ware.Forexample,CUDA9includedsoftwarethatcanimplementbarriersacross
+   -> _host_-cudaError_tcudaMallocManaged （void** ptr，
+   -> Unifiedmemorythat'sallocatedwithcudaMallocManagedshouldbefreedwitha
+   -> -_host_-cudaError_t cudaFree（void* ptr ）;
+Page 63 (Header: 6.15Summary)
+   -> 6.15Summary
+   -> if（threadIdx.x% warpSize<16)
+   -> Then all thethreadsinthefirsthalfofthewarpwillexecutestatement1,butallthe
+   -> threadsinthesecondhalfofthewarpwillexecutestatement2.However,thethreads
+   -> in awarp execute inSIMDfashion.Sowhile the threadsin thefirst half of thewarp
